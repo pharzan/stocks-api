@@ -1,23 +1,25 @@
-import dotenv from  'dotenv';
-import Boom from '@hapi/boom';
+import dotenv from 'dotenv';
 import fastify from 'fastify';
-
 import { indexRouter } from './routes';
 import { trades } from './routes/trades';
 import { stocks } from './routes/stocks';
 
 import knex from './helpers/knex';
 import pino from 'pino';
+
+import { FastifyInstance } from 'fastify';
+import { IncomingMessage, Server, ServerResponse } from 'http';
+
+
 dotenv.config();
 
 const logger = pino({});
 
 
-const port = process.env.PORT || 3002;
-console.log(port)
-// view engine setup
+const port: number = Number(process.env.PORT) || 3002;
+const host: string = process.env.HOST || '127.0.0.1';
 
-const app = fastify({ logger});
+const app: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify({ logger });
 
 app.register(indexRouter, { prefix: '/' });
 app.register(trades, { prefix: '/trades' });
@@ -33,20 +35,18 @@ app.register(knex, {
     }
 })
 
-//app.use('/trades', trades);
-//app.use('/erase', erase);
-//app.use('/stocks', stocks);
 
-const server = async () => {
+
+const server = async (): Promise<void> => {
     try {
-      await app.listen(port)
+        await app.listen(port, host)
     } catch (err) {
-      app.log.error(err)
-      process.exit(1)
+        app.log.error(err)
+        process.exit(1)
     }
-  }
-  server()
-  
+}
+server()
 
 
-// export { app };
+
+export { app };
