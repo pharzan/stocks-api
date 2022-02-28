@@ -1,65 +1,52 @@
+import dotenv from  'dotenv';
 import Boom from '@hapi/boom';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import express from 'express';
-import expressPinoLogger from 'express-pino-logger';
-import path from 'path';
-import pino from 'pino';
+import fastify from 'fastify';
+
 import { indexRouter } from './routes';
+import { trades } from './routes/trades';
+import { stocks } from './routes/stocks';
+
+import knex from './helpers/knex';
+import pino from 'pino';
+dotenv.config();
 
 const logger = pino({});
 
-const app = express();
-const port = 3002;
 
+const port = process.env.PORT || 3002;
+console.log(port)
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+const app = fastify({ logger});
 
+app.register(indexRouter, { prefix: '/' });
+app.register(trades, { prefix: '/trades' });
+app.register(stocks, { prefix: '/stocks' });
 
-app.use('/', indexRouter);
+app.register(knex, {
+    client: 'pg',
+    connection: {
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME
+    }
+})
+
 //app.use('/trades', trades);
 //app.use('/erase', erase);
 //app.use('/stocks', stocks);
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-    const err = Boom.notFound('Route not found');
-    next(err);
-});
-
-// error handler
-app.use((err, req, res, next) => {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
-});
-
-
-app.addListener('error', (error) => {
-    if (error.syscall !== 'listen') {
-        throw error;
+const server = async () => {
+    try {
+      await app.listen(port)
+    } catch (err) {
+      app.log.error(err)
+      process.exit(1)
     }
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-        case 'EADDRINUSE':
-            console.error(`${port} is already in use`);
-            process.exit(1);
-        default:
-            throw error;
-    }
-});
+  }
+  server()
+  
 
 
-app.listen(port, () => logger.info(`Example app listening at http://localhost:${port}`))
-
-export { app };
+// export { app };
