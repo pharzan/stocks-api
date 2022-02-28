@@ -1,70 +1,38 @@
+import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import Knex from 'knex';
+import { createTrade, getAllTrades, getTradeByUserId } from '../controllers/trades';
+import { IncomingMessage, Server, ServerResponse } from 'http';
+import { create } from "domain";
 
-const trades = async (fastify, opts, next) => {
+declare module 'fastify' {
+    export interface FastifyInstance {
+        knex: Knex;
+    }
+}
 
-    fastify.post('/', async (req, res) => {
+const trades = async (
+    fastify: FastifyInstance<Server, IncomingMessage, ServerResponse>,
+    opts: { prefix: string },
+    next: (err?: Error) => void) => {
 
-        const { id, symbol, type, user, price, timestamp, shares } = req.body;
-        
-        try {
-            await fastify.knex('trades').insert({
-                id,
-                symbol,
-                type,
-                user,
-                timestamp,
-                shares,
-                price
-            })
+    fastify.route({
+        method: 'POST',
+        url: '/',
+        handler: createTrade
+    });
 
-        } catch (e) {
-            console.log(e)
+    fastify.route({
+        method: 'GET',
+        url: '/',
+        handler: getAllTrades
+    });
 
-            return res.status(400).send({
-                response: false,
-                message: 'There was an error creating trade.'
-            })
-        }
-        return res.status(201).send({
-            response: true,
-            message: 'Trade was created.'
-        })
-    })
-
-    fastify.get('/', async (req, res) => {
-
-        const results = await fastify.knex.select('*').from('trades').orderBy('id', 'asc');
-
-         res.status(200).send({
-            response: true,
-            message: 'all trades',
-            results
-        })
-    })
-
-    fastify.get('/users/:userId', async (req, res) => {
-
-        const { userId } = req.params;
-        const results = await fastify.knex.select('*')
-        .from('trades')
-        .whereRaw(`"user"->>'id'='${userId.toString()}'`)
-
-        if(!results.length){
-            return res.status(404).send({
-                response: false,
-                message: 'No trades found for user.'
-            })
-        }
-
-        res.status(200).send({
-            response: true,
-            message: 'all trades for user ' + userId,
-            results
-        })
-    })
+    fastify.route({
+        method: 'GET',
+        url: '/users/:userId',
+        handler: getTradeByUserId
+    });
 
     next();
 }
-
-
-
 export { trades };
