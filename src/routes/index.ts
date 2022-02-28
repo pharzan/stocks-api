@@ -11,9 +11,17 @@ const indexRouter=async (fastify, opts, next) => {
     })
     
     fastify.delete('/erase', async(req, res) => {
+        try{
+        await fastify.knex('trades').delete();}
+        catch(e){
+            return res.stats(400).send({
+                response: false,
+                message: 'error deleting trades'
+            })
+        }
         return res.status(200).send({
             response: true,
-            message: 'DELETE'        
+            message: 'all records were deleted.'        
         })
     })
 
