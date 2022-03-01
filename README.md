@@ -1,6 +1,6 @@
 
 # STOCK API
-This repository contains my solution to a coding challenge for a job interview. I thought I'd do a video recording of the process. It's something I wanted to do for a long time and I thought this would be a good start. Below I have added the videos to my code and [here](./pdf/Stock Trades API.pdf) the pdf file of the chalenge can be found.
+This repository contains my solution to a coding challenge for a job interview. I thought I'd do a video recording of the process. It's something I wanted to do for a long time and I thought this would be a good start. Below I have added the videos to my code and [here](./pdf/Stock-Trades-API.pdf) the pdf file of the chalenge can be found.
 
 ## Walkthrough:
 
