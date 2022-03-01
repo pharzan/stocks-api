@@ -1,6 +1,6 @@
 
 # STOCK API
-This repository contains my solution to a coding challenge for a job interview. I thought I'd do a video recording of the process. It's something I wanted to do for a long time and I thought this would be a good start.
+This repository contains my solution to a coding challenge for a job interview. I thought I'd do a video recording of the process. It's something I wanted to do for a long time and I thought this would be a good start. Below I have added the videos to my code and [here](./pdf/Stock Trades API.pdf) the pdf file of the chalenge can be found.
 
 ## Walkthrough:
 
@@ -36,16 +36,7 @@ A Docker image is included and if you need to run the docker file you can build 
 
 A postman collection can be found [here](./postman_collection/stocks-api.postman_collection.json).
 
-##
-[Initiate a git repository]()
-Remove express and excessive code from the current code
-Add required dependencies and packages
-Create the structure for the endpoints
-Create db a Postgres on aws and the required tables and fields
-Create db connections using Knex
-Create endpoints logic
-Do a refactoring and add typescript requirements
-Run the tests
-Create a docker file
-Create a simple front
-Github actions and beyond
+## To Do:
+1. create a deployment walkthrough
+2. create a frontend app for the code
+3. go through the code and make the typescript a bit better
