@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "7f57687c-ecee-45cf-8753-6d1de8b5b83c",
+		"name": "stock-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Create Trade",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":1,\n    \"type\":\"buy\",\n    \"user\":{\n        \"id\":1,\n        \"name\":\"Farzan\"\n    },\n    \"symbol\":\"ABC\",\n    \"shares\":10,\n    \"price\":150.25,\n    \"timestamp\":\"2021-02-01 12:00:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/stocks",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"stocks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All trades",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/trades",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"trades"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Trades by user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/trades/users/2",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"trades",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Erase trades",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/erase",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"erase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get stock by symbol",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/stocks/stats?start=2021-01-01&end=2021-12-01",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"stocks",
+						"stats"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2021-01-01"
+						},
+						{
+							"key": "end",
+							"value": "2021-12-01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get statictics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/stocks/ABC/price?start=2021-01-01&end=2021-12-01",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"stocks",
+						"ABC",
+						"price"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2021-01-01"
+						},
+						{
+							"key": "end",
+							"value": "2021-12-01"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
