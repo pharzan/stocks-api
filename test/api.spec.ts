@@ -1,6 +1,7 @@
+jest.useFakeTimers()
+// https://stackoverflow.com/questions/50793885/referenceerror-you-are-trying-to-import-a-file-after-the-jest-environment-has
 import fs from 'fs';
 import { app } from '../src/app';
-
 const dir = './test/data/';
 const testFolder = './test/data';
 let testCaseNames = fs.readFileSync(dir + 'description.txt', 'utf8').toString().split('\n');
@@ -9,6 +10,8 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
+// const app = start
+console.log(app)
 
 interface ITest {
     request: {
@@ -43,64 +46,129 @@ for (const file of files) {
 }
 
 jest.setTimeout(120 * 1000);
-describe('Check Tests', () => {
-    const matrix: any[] = [];
+// describe('Check Tests', () => {
+//     const matrix: any[] = [];
 
-    test('a', async () => {
+//     test('a', async (done) => {
 
-        const entries = Object.entries(table);
-        for (const [test, requests] of entries) {
+//         const entries = Object.entries(table);
+//         for (const [test, requests] of entries) {
 
-            console.log(`Running ${test} \n\n`);
+//             console.log(`Running ${test} \n\n`);
 
-            for (const eve of requests) {
-                let response;
+//             for (const eve of requests) {
+//                 let response;
+//                 switch (eve.request.method) {
+//                     case 'DELETE':
+//                         // response = await chai.request(app).delete(eve.request.url);
+//                         response = await app.inject({
+//                             url: eve.request.url,
+//                             method: 'DELETE'
+//                         })
+//                         expect(response.status).toEqual(eve.response.status_code);
+//                         break;
 
-                switch (eve.request.method) {
-                    case 'DELETE':
-                        response = await chai.request(app).delete(eve.request.url);
-                        expect(response.status).toEqual(eve.response.status_code);
-                        break;
+//                     case 'GET':
+//                         // response = await chai.request(app).delete(eve.request.url);
+//                         response = await app.inject({
+//                             url: eve.request.url,
+//                             method: 'GET'
+//                         })
+//                         expect(response.statusCode).toEqual(eve.response.status_code)
+//                         let ar1 = response.body;
+//                         let ar2 = eve.response.body;
+//                         if (eve.response.status_code === 404) {
+//                             continue;
+//                         }
 
-                    case 'GET':
-                        response = await chai.request(app).delete(eve.request.url);
-                        expect(response.statusCode).toEqual(eve.response.status_code)
-                        let ar1 = response.body;
-                        let ar2 = eve.response.body;
-                        if (eve.response.status_code === 404) {
-                            continue;
-                        }
+//                         expect((ar2 as []).length).toEqual(ar1.length);
 
-                        expect((ar2 as []).length).toEqual(ar1.length);
+//                         for (let k = 0; k < ar1.length; k++) {
+//                             expect(ar2[k]).toEqual(ar1[k]);
+//                         }
+//                         break;
 
-                        for (let k = 0; k < ar1.length; k++) {
-                            expect(ar2[k]).toEqual(ar1[k]);
-                        }
-                        break;
+//                     case 'POST':
+//                         // response = await chai.request(app)
+//                         //     .post(eve.request.url)
+//                         //     .set(eve.request.headers)
+//                         //     .send(eve.request.body);
+//                             response = await app.inject({
+//                                 url: eve.request.url,
+//                                 method: 'POST',
+//                                 payload: eve.request.body
 
-                    case 'POST':
-                        response = await chai.request(app)
-                            .post(eve.request.url)
-                            .set(eve.request.headers)
-                            .send(eve.request.body);
+//                             })
+//                         expect(response.status).toEqual(eve.response.status_code);
+//                         break;
 
-                        expect(response.status).toEqual(eve.response.status_code);
-                        break;
+//                     case 'PUT':
+//                         // response = await chai.request(app)
+//                         //     .put(eve.request.url)
+//                         //     .set(eve.request.headers)
+//                         //     .send(eve.request.body);
+//                             response = await app.inject({
+//                                 url: eve.request.url,
+//                                 method: 'PUT',
+//                                 payload: eve.request.body
 
-                    case 'PUT':
-                        response = await chai.request(app)
-                            .put(eve.request.url)
-                            .set(eve.request.headers)
-                            .send(eve.request.body);
+//                             })
 
-                        expect(response.status).toEqual(eve.response.status_code);
-                        break;
+//                         expect(response.status).toEqual(eve.response.status_code);
+//                         break;
 
-                    default:
-                        console.log(`unknown method`);
+//                     default:
+//                         console.log(`unknown method`);
+//                 }
+//             }
+//         }
+//         done();
+//     });
+// });
+
+describe('Testing STOCK API', () => {
+    describe('Testing...', () => {
+        test('Tesing all routes', async (done) => {
+            const entries = Object.entries(table);
+            for (const [test, requests] of entries) {
+
+                console.log(`Running ${test} \n\n`);
+
+                for (const eve of requests) {
+                    let response;
+                    switch (eve.request.method) {
+                        case 'DELETE':
+                            response = await app.inject({
+                                url: eve.request.url,
+                                method: 'DELETE'
+                            })
+                            expect(response.statusCode).toEqual(eve.response.status_code);
+                            break;
+
+                        case "GET":
+                            const res = await app.inject({
+                                url: eve.request.url,
+                                method: 'GET'
+                            })
+                            expect(res.statusCode).toEqual(200)
+                            break;
+                        case 'POST':
+                            response = await app.inject({
+                                url: eve.request.url,
+                                method: 'POST',
+                                payload: eve.request.body
+
+                            })
+                            expect(response.statusCode).toEqual(eve.response.status_code);
+                            break;
+
+                    }
                 }
             }
-        }
+            await app.close()
+            done()
+
+        })
+
     });
 });
-

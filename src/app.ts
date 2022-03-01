@@ -37,6 +37,9 @@ app.register(indexRouter, { prefix: '/' });
 app.register(trades, { prefix: '/trades' });
 app.register(stocks, { prefix: '/stocks' });
 
+app.register(require('fastify-cors'), {})
+
+  
   
 const start = async (): Promise<void> => {
     try {

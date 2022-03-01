@@ -1,5 +1,6 @@
 import { health, eraseAllTrades } from '../controllers/indexRouter'
-
+import { stocks } from './stocks'
+import { trades } from './trades'
 
 const indexRouter=async (fastify, opts, next) => {
 
@@ -12,4 +13,4 @@ const indexRouter=async (fastify, opts, next) => {
 
 
 
-export { indexRouter };
+export { indexRouter, stocks, trades };

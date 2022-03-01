@@ -5,7 +5,9 @@ const stocks = async (fastify: FastifyInstance, opts, next) => {
     fastify.route({
         method: 'GET',
         url: '/:symbol/price',
-        handler: getSymbolPrice
+        handler: getSymbolPrice,
+
+
     })
 
     fastify.route({
@@ -13,7 +15,7 @@ const stocks = async (fastify: FastifyInstance, opts, next) => {
         url: '/stats',
         handler: getStats
     })
-   
+
     next();
 }
 
